@@ -8,7 +8,7 @@ export @unpack, @pack!
 # Below code slightly adapted from Simon Danisch's GLVisualize via PR
 # https://github.com/mauro3/Parameters.jl/pull/13
 #
-# Note, this used to be part of the package Paramters.jl
+# Note, this used to be part of the package Parameters.jl
 
 """
 This function is invoked to unpack one field/entry of some DataType
