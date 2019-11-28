@@ -55,7 +55,9 @@ determined by the functions `UnPack.unpack` and `UnPack.pack!`.
 The `UnPack.unpack` function is invoked to unpack one entity of some
 `DataType` and has signature:
 
-`unpack(dt::Any, ::Val{property}) -> value of property`
+```julia
+unpack(dt::Any, ::Val{property}) -> value of property
+```
 
 Note that `unpack` (and `pack!`) works with `Base.getproperty`.  By
 default this means that all the fields of a type are unpacked but if
@@ -64,7 +66,8 @@ default this means that all the fields of a type are unpacked but if
 Three method definitions are included in the package to unpack a
 composite type/module/NamedTuple, or a dictionary with Symbol or
 string keys:
-```
+
+```julia
 @inline unpack{f}(x, ::Val{f}) = getproperty(x, f)
 @inline unpack{k}(x::Associative{Symbol}, ::Val{k}) = x[k]
 @inline unpack{S<:AbstractString,k}(x::Associative{S}, ::Val{k}) = x[string(k)]
@@ -73,15 +76,35 @@ string keys:
 The `UnPack.pack!` function is invoked to pack one entity into some
 `DataType` and has signature:
 
-`pack!(dt::Any, ::Val{field}, value) -> value`
+```julia
+pack!(dt::Any, ::Val{field}, value) -> value
+```
 
 Three definitions are included in the package to pack into a mutable composite
 type or into a dictionary with Symbol or string keys:
-```
+
+```julia
 @inline pack!{f}(x, ::Val{f}, val) = setproperty!(x, f, val)
 @inline pack!{k}(x::Associative{Symbol}, ::Val{k}, val) = x[k]=val
 @inline pack!{S<:AbstractString,k}(x::Associative{S}, ::Val{k}, val) = x[string(k)]=val
 ```
 
 More methods can be added to `unpack` and `pack!` to allow for
-specialized packing of datatypes.
+specialized unpacking/packing of datatypes. Here is a MWE of customizing 
+`unpack`, so that it multiplies the values by 2:
+
+```julia
+using UnPack
+struct Foo
+    a
+    b
+end
+p = Foo(1, 2)
+@unpack a, b = p
+a, b # gives (1, 2)
+
+# Now we specialize unpack for our custom type, `Foo`
+@inline UnPack.unpack(x::Foo, ::Val{f}) where {f} = 2 * getproperty(x, f)
+@unpack a, b = p
+a, b # now gives (2, 4)
+```
