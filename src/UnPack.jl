@@ -86,7 +86,7 @@ a == 4 #true
 c == "Hi" #true
 ```
 
-Note that its functionality can be extende by adding methods to the
+Note that its functionality can be extended by adding methods to the
 `UnPack.unpack` function.
 """
 macro unpack(args)
