@@ -63,11 +63,11 @@ function pack! end
 @inline pack!(x::AbstractDict{<:AbstractString}, ::Val{k}, val) where {k} = x[string(k)]=val
 
 """
-Unpacks fields/properties/keys from a composite type, a `Dict{Symbol}`, a `Dict{String}`,
-or a module into variables
 ```julia_skip
-@unpack a, b, c = dict_or_typeinstance
+@unpack a, b, c, ... = dict_or_typeinstance
 ```
+Unpack fields/properties/keys from a composite type, a `Dict{Symbol}`, a `Dict{String}`,
+or a module into variables.
 
 Example with dict:
 ```julia
@@ -106,10 +106,10 @@ end
 
 
 """
-Packs variables into a mutable, composite type, a `Dict{Symbol}`, or a `Dict{String}`
 ```julia_skip
-@pack! dict_or_typeinstance = a, b, c
+@pack! dict_or_typeinstance = a, b, c, ...
 ```
+Pack variables into a mutable composite type, a `Dict{Symbol}`, or a `Dict{String}`.
 
 Example with dict:
 ```julia
@@ -131,7 +131,7 @@ d.a == 99 #true
 d.c == "HaHa" #true
 ```
 
-Note that its functionality can be extende by adding methods to the
+Note that its functionality can be extended by adding methods to the
 `UnPack.pack!` function.
 
 To "pack" immutables use the package Setfield.jl.

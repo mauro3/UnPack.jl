@@ -1,7 +1,7 @@
 name = "UnPack"
 uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 authors = ["Mauro Werder"]
-version = "1.0.0"
+version = "1.0.1"
 
 [compat]
 julia = "1"
