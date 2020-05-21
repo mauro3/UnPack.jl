@@ -44,7 +44,7 @@ c == "Hi!" #true
 
 d = Dict{String,Any}()
 @pack! d = a, c
-d # -> Dict{String,Any}("a"=>5.0,"a"=>"Hi!")
+d # -> Dict{String,Any}("a"=>5.0,"c"=>"Hi!")
 ```
 
 ## Customization of `@unpack` and `@pack!`
