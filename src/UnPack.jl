@@ -90,16 +90,16 @@ Note that its functionality can be extended by adding methods to the
 `UnPack.unpack` function.
 """
 macro unpack(args)
-    args.head!=:(=) && error("Expression needs to be of form `a, b = c`")
+    args.head != :(=) && error("Expression needs to be of form `a, b = c`")
     items, suitecase = args.args
     items = isa(items, Symbol) ? [items] : items.args
     suitecase_instance = gensym()
-    kd = [:( $key = $UnPack.unpack($suitecase_instance, Val{$(Expr(:quote, key))}()) ) for key in items]
+    kd = [:($key = $UnPack.unpack($suitecase_instance, Val{$(Expr(:quote, key))}()) ) for key in items]
     kdblock = Expr(:block, kd...)
     expr = quote
         $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
         $kdblock
-        $suitecase_instance # return RHS of `=` as standard in Julia
+        ($(items...),)
     end
     esc(expr)
 end
