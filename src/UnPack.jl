@@ -97,7 +97,7 @@ macro unpack(args)
     kd = [:( $key = $UnPack.unpack($suitecase_instance, Val{$(Expr(:quote, key))}()) ) for key in items]
     kdblock = Expr(:block, kd...)
     expr = quote
-        $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
+        local $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
         $kdblock
         $suitecase_instance # return RHS of `=` as standard in Julia
     end
@@ -148,7 +148,7 @@ function _pack_bang(args)
     kd = [:( $UnPack.pack!($suitecase_instance, Val{$(Expr(:quote, key))}(), $key) ) for key in items]
     kdblock = Expr(:block, kd...)
     return quote
-        $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
+        local $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
         $kdblock
         ($(items...),)
     end
