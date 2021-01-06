@@ -68,9 +68,9 @@ composite type/module/NamedTuple, or a dictionary with Symbol or
 string keys:
 
 ```julia
-@inline unpack{f}(x, ::Val{f}) = getproperty(x, f)
-@inline unpack{k}(x::Associative{Symbol}, ::Val{k}) = x[k]
-@inline unpack{S<:AbstractString,k}(x::Associative{S}, ::Val{k}) = x[string(k)]
+@inline unpack(x, ::Val{f}) where {f} = getproperty(x, f)
+@inline unpack(x::AbstractDict{Symbol}, ::Val{k}) where {k} = x[k]
+@inline unpack(x::AbstractDict{<:AbstractString}, ::Val{k}) where {k} = x[string(k)]
 ```
 
 The `UnPack.pack!` function is invoked to pack one entity into some
@@ -84,13 +84,13 @@ Three definitions are included in the package to pack into a mutable composite
 type or into a dictionary with Symbol or string keys:
 
 ```julia
-@inline pack!{f}(x, ::Val{f}, val) = setproperty!(x, f, val)
-@inline pack!{k}(x::Associative{Symbol}, ::Val{k}, val) = x[k]=val
-@inline pack!{S<:AbstractString,k}(x::Associative{S}, ::Val{k}, val) = x[string(k)]=val
+@inline pack!(x, ::Val{f}, val) where {f} = setproperty!(x, f, val)
+@inline pack!(x::AbstractDict{Symbol}, ::Val{k}, val) where {k} = x[k]=val
+@inline pack!(x::AbstractDict{<:AbstractString}, ::Val{k}, val) where {k} = x[string(k)]=val
 ```
 
 More methods can be added to `unpack` and `pack!` to allow for
-specialized unpacking/packing of datatypes. Here is a MWE of customizing 
+specialized unpacking/packing of datatypes. Here is a MWE of customizing
 `unpack`, so that it multiplies the values by 2:
 
 ```julia
