@@ -1,10 +1,8 @@
 # UnPack
 
-[![Build Status](https://travis-ci.com/mauro3/UnPack.jl.svg?branch=master)](https://travis-ci.com/mauro3/UnPack.jl)
+[![Build Status](https://github.com/mauro3/UnPack.jl/workflows/CI/badge.svg)](https://github.com/mauro3/UnPack.jl/actions)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/mauro3/UnPack.jl?svg=true)](https://ci.appveyor.com/project/mauro3/UnPack-jl)
-[![Codecov](https://codecov.io/gh/mauro3/UnPack.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/mauro3/UnPack.jl)
-[![Build Status](https://api.cirrus-ci.com/github/mauro3/UnPack.jl.svg)](https://cirrus-ci.com/github/mauro3/UnPack.jl)
-
+[![Coverage](https://codecov.io/gh/mauro3/UnPack.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/mauro3/UnPack.jl)
 
 It is often convenient to unpack some or all of the fields of a type,
 and pack, in the case of mutable datatypes (for immutables use
