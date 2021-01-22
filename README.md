@@ -3,6 +3,10 @@
 [![Build Status](https://github.com/mauro3/UnPack.jl/workflows/CI/badge.svg)](https://github.com/mauro3/UnPack.jl/actions)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/mauro3/UnPack.jl?svg=true)](https://ci.appveyor.com/project/mauro3/UnPack-jl)
 [![Coverage](https://codecov.io/gh/mauro3/UnPack.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/mauro3/UnPack.jl)
+[![pkgeval](https://juliahub.com/docs/UnPack/pkgeval.svg)](https://juliahub.com/ui/Packages/UnPack/zm2TF)
+
+[![deps](https://juliahub.com/docs/UnPack/deps.svg)](https://juliahub.com/ui/Packages/UnPack/zm2TF?t=2)
+[![version](https://juliahub.com/docs/UnPack/version.svg)](https://juliahub.com/ui/Packages/UnPack/zm2TF)
 
 It is often convenient to unpack some or all of the fields of a type,
 and pack, in the case of mutable datatypes (for immutables use
@@ -106,3 +110,9 @@ a, b # gives (1, 2)
 @unpack a, b = p
 a, b # now gives (2, 4)
 ```
+
+# Related
+
+- Julia issue on unpacking of function arguments
+  https://github.com/JuliaLang/julia/issues/28579
+- setting immutables https://github.com/jw3126/Setfield.jl
