@@ -24,6 +24,14 @@ using Test
     @test c == "Hi!" #true
 end
 
+@testset "RegexMatch" begin
+    # Example with regex match:
+    m = match(r"(?<a>.) -> (?<b>.)", "2 -> 1")
+    @unpack a, b = m
+    @test a == "2" #true
+    @test b == "1" #true
+end
+
 # having struct-defs inside a testset seems to be problematic in some julia version
 mutable struct PropertyExample
     a
