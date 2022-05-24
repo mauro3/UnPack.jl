@@ -13,7 +13,7 @@ and pack, in the case of mutable datatypes (for immutables use
 [Setfield.jl](https://github.com/jw3126/Setfield.jl)). This is often
 the case when a struct is passed into a function.
 
-The [`@unpack`](@ref) and [`@pack!`](@ref) macros work to unpack
+The `@unpack` and `@pack!` macros work to unpack
 types, modules, and dictionaries (and can be customized for other
 types too, see next section).
 
