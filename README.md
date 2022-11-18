@@ -49,6 +49,20 @@ d = Dict{String,Any}()
 d # -> Dict{String,Any}("a"=>5.0,"c"=>"Hi!")
 ```
 
+Using `=>` allows unpacking to local variables that are different from a key:
+```julia
+struct MyContainer{T}
+    a::T
+    b::T
+end
+
+function Base.:(==)(x::MyContainer, y::MyContainer)
+    @unpack a, b = x
+    @unpack a => ay, b => by = y
+    a == ay && b ≈ by
+end
+```
+
 ## Customization of `@unpack` and `@pack!`
 
 What happens during the (un-)packing of a particular datatype is
