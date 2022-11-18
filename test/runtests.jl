@@ -37,10 +37,12 @@ using Test
     end
 
     @testset "invalid patterns" begin
-        @test_throws ErrorException macroexpand(Main, :(@unpack a))
-        @test_throws ErrorException macroexpand(Main, :(@unpack "a fish" = 1))
-        @test_throws ErrorException macroexpand(Main, :(@unpack a => "a fish" = 1))
-        @test_throws ErrorException macroexpand(Main, :(@unpack 1 => b = 1))
+        # NOTE: before 1.8, error in macroexpand throws LoadError
+        ERR = VERSION < v"1.8" ? LoadError : ErrorException
+        @test_throws ERR macroexpand(Main, :(@unpack a))
+        @test_throws ERR macroexpand(Main, :(@unpack "a fish" = 1))
+        @test_throws ERR macroexpand(Main, :(@unpack a => "a fish" = 1))
+        @test_throws ERR macroexpand(Main, :(@unpack 1 => b = 1))
     end
 end
 
