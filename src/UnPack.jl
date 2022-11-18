@@ -81,20 +81,35 @@ Example with type:
 ```julia
 struct A; a; b; c; end
 d = A(4,7.0,"Hi")
-@unpack a, c = d
-a == 4 #true
-c == "Hi" #true
+@unpack a, c => C = d
+a == 4 # true
+C == "Hi" # note renaming, true
 ```
 
 Note that its functionality can be extended by adding methods to the
 `UnPack.unpack` function.
 """
 macro unpack(args)
-    args.head!=:(=) && error("Expression needs to be of form `a, b = c`")
+    (args isa Expr && args.head == :(=)) ||
+        error("Expression needs to be of form `a, b => b_renamed = c`")
     items, suitecase = args.args
-    items = isa(items, Symbol) ? [items] : items.args
+    items = (items isa Expr && items.head == :tuple) ? items.args : [items]
+    function _is_rename_expr(item)
+        (item isa Expr && item.head == :call) || return false
+        a = item.args
+        a[1] == :(=>) && a[2] isa Symbol && a[3] isa Symbol
+    end
     suitecase_instance = gensym()
-    kd = [:( $key = $UnPack.unpack($suitecase_instance, Val{$(Expr(:quote, key))}()) ) for key in items]
+    kd = map(items) do item
+        key, var = if item isa Symbol
+            item, item
+        elseif _is_rename_expr(item)
+            item.args[2], item.args[3]
+        else
+            error("Unrecognized key $(item). Keys need to be of the form `key` or `key => var`.")
+        end
+        :( $var = $UnPack.unpack($suitecase_instance, Val{$(Expr(:quote, key))}()) )
+    end
     kdblock = Expr(:block, kd...)
     expr = quote
         local $suitecase_instance = $suitecase # handles if suitecase is not a variable but an expression
@@ -103,7 +118,6 @@ macro unpack(args)
     end
     esc(expr)
 end
-
 
 """
 ```julia_skip

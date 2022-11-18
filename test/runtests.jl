@@ -6,22 +6,44 @@ using Test
     ###########################
     # Packing and unpacking @unpack, @pack!
     ##########################
-    # Example with dict:
-    d = Dict{Symbol,Any}(:a=>5.0,:b=>2,:c=>"Hi!")
-    @unpack a, c = d
-    @test a == 5.0 #true
-    @test c == "Hi!" #true
 
-    d = Dict("a"=>5.0,"b"=>2,"c"=>"Hi!")
-    @unpack a, c = d
-    @test a == 5.0 #true
-    @test c == "Hi!" #true
+    @testset "dict with symbols" begin
+        d = Dict{Symbol,Any}(:a=>5.0,:b=>2,:c=>"Hi!")
+        @unpack a, c = d
+        @test a == 5.0 #true
+        @test c == "Hi!" #true
+    end
 
-    # Example with named tuple
-    @eval d = (a=5.0, b=2, c="Hi!")
-    @unpack a, c = d
-    @test a == 5.0 #true
-    @test c == "Hi!" #true
+    @testset "dict with strings" begin
+        d = Dict("a"=>5.0,"b"=>2,"c"=>"Hi!")
+        @unpack a, c = d
+        @test a == 5.0 #true
+        @test c == "Hi!" #true
+    end
+
+    @testset "named tuple" begin
+        @eval d = (a=5.0, b=2, c="Hi!")
+        @unpack a, c = d
+        @test a == 5.0 #true
+        @test c == "Hi!" #true
+    end
+
+    @testset "named tuple, renaming"  begin
+        d = (a = 1, b = 2)
+        @unpack a => c, b = d
+        @test c == 1
+        @test b == 2
+        @test !@isdefined a
+    end
+
+    @testset "invalid patterns" begin
+        # NOTE: before 1.8, error in macroexpand throws LoadError
+        ERR = VERSION < v"1.8" ? LoadError : ErrorException
+        @test_throws ERR macroexpand(Main, :(@unpack a))
+        @test_throws ERR macroexpand(Main, :(@unpack "a fish" = 1))
+        @test_throws ERR macroexpand(Main, :(@unpack a => "a fish" = 1))
+        @test_throws ERR macroexpand(Main, :(@unpack 1 => b = 1))
+    end
 end
 
 # having struct-defs inside a testset seems to be problematic in some julia version
