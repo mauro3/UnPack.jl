@@ -18,12 +18,13 @@ This function is invoked to unpack one field/entry of some DataType
 
 The `sym` is the symbol of the assigned variable.
 
-Three definitions are included in the package to unpack a composite type
-or a dictionary with Symbol or string keys:
+Four definitions are included in the package to unpack a composite type,
+a dictionary with `Symbol` or string keys, or a `RegexMatch`:
 ```
 @inline unpack(x, ::Val{f}) where {f} = getproperty(x, f)
 @inline unpack(x::AbstractDict{Symbol}, ::Val{k}) where {k} = x[k]
 @inline unpack(x::AbstractDict{S}, ::Val{k}) where {S<:AbstractString,k} = x[string(k)]
+@inline unpack(x::RegexMatch, ::Val{k}) where {k} = x[k]
 ```
 
 More methods can be added to allow for specialized unpacking of other datatypes.
@@ -34,6 +35,7 @@ function unpack end
 @inline unpack(x, ::Val{f}) where {f} = getproperty(x, f)
 @inline unpack(x::AbstractDict{Symbol}, ::Val{k}) where {k} = x[k]
 @inline unpack(x::AbstractDict{<:AbstractString}, ::Val{k}) where {k} = x[string(k)]
+@inline unpack(x::RegexMatch, ::Val{k}) where {k} = x[k]
 
 """
 This function is invoked to pack one entity into some DataType and has
@@ -84,6 +86,14 @@ d = A(4,7.0,"Hi")
 @unpack a, c = d
 a == 4 #true
 c == "Hi" #true
+```
+
+Example with regex match:
+```julia
+m = match(r"(?<a>.) -> (?<b>.)", "2 -> 1")
+@unpack a, b = m
+a == "2" #true
+b == "1" #true
 ```
 
 Note that its functionality can be extended by adding methods to the
